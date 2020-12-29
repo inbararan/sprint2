@@ -7,13 +7,14 @@ def create_frames():
     vidcap = cv2.VideoCapture('output.avi')
     success, image = vidcap.read()
     count = 0
+    lst = [image]
     while success:
-        lst = [image]
+
         # cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file
         success, image = vidcap.read()
         lst.append(image)
-        """"
-        print('Read a new frame: ', success)"""
+
+        print('Read a new frame: ', success)
         count += 1
     return lst
 

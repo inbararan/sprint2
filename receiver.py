@@ -76,15 +76,15 @@ class Camera():
 
 def main():
     frames = []
-    # vc = Camera("http://" + argv[1] + ":5000/video_feed")
-    vc = cv2.VideoCapture(0)
+    vc = Camera("http://" + argv[1] + ":5000/video_feed")
+    # vc = cv2.VideoCapture(0)
 
     # print("Camera is alive?: " + str(cam.p.is_alive()))
 
     while(1):
 
-        # frame = vc.get_frame()
-        ret, frame = vc.read()
+        frame = vc.get_frame()
+        # ret, frame = vc.read()
         frames.append(copy.deepcopy(frame))
         cv2.imshow("Feed", frame)
 

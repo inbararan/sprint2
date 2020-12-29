@@ -9,6 +9,8 @@ import multiprocessing as mp
 from sys import argv
 import keyboard
 from point_detector import detect_on_points
+import get_frames_from_video
+# get_frame_from_vid = get_frames_from_video.create_get_frame_func()
 
 
 class Camera():
@@ -80,16 +82,18 @@ class Camera():
 
 
 def get_pics():
-    frames = []
+    # frames = []
     frame_to_check = []
     frame_off = []
-    cam = Camera("http://" + argv[1] + ":5000/video_feed")
-
-    print("Camera is alive?: " + str(cam.p.is_alive()))
+    # cam = Camera("http://" + argv[1] + ":5000/video_feed")
+    cam = cv2.VideoCapture(0)
+    # print("Camera is alive?: " + str(cam.p.is_alive()))
 
     while (1):
-        frame = cam.get_frame()
-        frames.append(copy.deepcopy(frame))
+        # frame = cam.get_frame()
+        # frame = get_frame_from_vid()
+        ret, frame = cam.read()
+        # frames.append(copy.deepcopy(frame))
         cv2.imshow("Feed", frame)
         if keyboard.is_pressed("o"):
             frame_off = copy.deepcopy(frame)
@@ -99,7 +103,8 @@ def get_pics():
         key = cv2.waitKey(1)
 
     cv2.destroyAllWindows()
-    cam.end()
+    # cam.end()
+    cam.release()
     return frame_to_check, frame_off
 
 
@@ -122,16 +127,15 @@ def click_event(event, x, y, flags, param):
         strBGR = str(blue) + ", " + str(green) + "," + str(red)
         cv2.putText(img, strBGR, (x, y), font, 0.5, (0, 255, 255), 2)
         cv2.imshow("image", img)
-    if len(refPt) == 5:
-        cv2.setMouseCallback("image", (lambda x: x + 1))
+    # if len(refPt) == 5:
+    #     cv2.setMouseCallback("image", (lambda x: x + 1))
 
 
 refPt = []
 
 
 def return_to_ophir():
-    # frame_to_check, frame_off = get_pics()
-    frame_to_check, frame_off = get_pics_from_video()
+    frame_to_check, frame_off = get_pics()
 
     events = [i for i in dir(cv2) if 'EVENT' in i]
 
@@ -140,8 +144,8 @@ def return_to_ophir():
         # This will display all the available mouse click events
 
         # Here, you need to change the image name and it's path according to your directory
-        img = frame_to_check
         global img
+        img = frame_to_check
         cv2.imshow("image", img)
         if len(refPt) == 5:
             break
@@ -153,18 +157,27 @@ def return_to_ophir():
 
     states = []
     check_if_already = False
+    cam = cv2.VideoCapture(0)
     while True:
         # cam = Camera("http://" + argv[1] + ":5000/video_feed")
         # cur_frame = cam.get_frame()
-        cur_frame = get_cur_frame()
+        # cur_frame = get_frame_from_vid()
+        ret, cur_frame = cam.read()
         bools = detect_on_points(cur_frame, refPt, frame_off)
-        if len(states) != 0 and bools == [1, 1, 1, 1, 1]:
+        print(bools)
+        if keyboard.is_pressed("s") and len(states) % 2 == 0:
             break
-        if bools == [1, 1, 1, 1, 1]:
+        # if len(states) > 20 and len(states) % 2 == 0 and bools == [1, 1, 1, 1, 1]:
+        #    break
+        if bools == [1, 1, 1, 1, 1] or bools == [0, 0, 0, 0, 0]:
             continue
+
         if not(bools[4] == 1 and bools[0] == 0 and bools[1] == 0 and bools[2] == 0 and bools[3] == 0) and not check_if_already:
             states.append(State(bools[0], bools[1], bools[2], bools[3], bools[4]))
             check_if_already = True
         else:
             check_if_already = False
+    cam.release()
+    cv2.destroyAllWindows()
+    print(states)
     return states
