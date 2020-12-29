@@ -16,10 +16,10 @@ def encode(f):
             m = m << 1
         bits.reverse()
 
-        xor1 = bits[0] ^ bits[1] ^ bits[2] ^ bits[3]
-        xor2 = bits[4] ^ bits[5] ^ bits[6] ^ bits[7]
-        S1 = State(bits[0], bits[1], bits[2], bits[3], xor1)
-        S2 = State(bits[4], bits[5], bits[6], bits[7], xor2)
+        #parity1 = int(((bits[0] + bits[1] + bits[2] + bits[3]) % 2 == 1))
+        #parity2 = int(((bits[4] + bits[5] + bits[6] + bits[7]) % 2 == 1))
+        S1 = State(bits[0], bits[1], bits[2], bits[3], 0)
+        S2 = State(bits[4], bits[5], bits[6], bits[7], 0)
         states.append(S1)
         states.append(S2)
 

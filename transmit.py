@@ -6,15 +6,31 @@ import time
 import os
 import sys
 
-
-def blink():
-    stateAll = State(1, 1, 1, 1, 1)
-    stateNone = State(1, 1, 1, 1, 1)
+stateAll = State(1, 1, 1, 1, 1)
+stateOne = State(0, 0, 0, 0, 1)
 
 
-f = open("test.txt", "r")
+"""def blink():
+    set_state(stateAll)
+    time.sleep(1)
+    set_state(stateNone)
+    time.sleep(1)
+
+
+blink()"""
+
+set_state(stateAll)
+
+file_name = input()
+time.sleep(3)
+
+f = open(os.path.abspath("file_name"), "rb")
 states = encode(f)
 
 for state in states:
-    time.sleep(0.4)
+    set_state(stateOne)
+    time.sleep(0.2)
     set_state(state)
+    time.sleep(0.2)
+
+set_state(State(0, 0, 0, 0, 0))
