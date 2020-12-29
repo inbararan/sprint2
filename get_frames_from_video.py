@@ -2,10 +2,8 @@
 # Date: 29/12/2020
 import cv2
 
-global lstframes
 
-
-def create_frames:
+def create_frames():
     vidcap = cv2.VideoCapture('output.avi')
     success, image = vidcap.read()
     count = 0
