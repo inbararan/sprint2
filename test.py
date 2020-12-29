@@ -1,8 +1,6 @@
-b = ord(b'z')
-m = 1
-bits = []
-for i in range(0, 8):
-    bits.append(int((m & b) != 0))
-    m = m << 1
-bits.reverse()
-print(bits)
+import base64
+
+with open("im.bmp", "rb") as imageFile:
+    str = base64.b64encode(imageFile.read())
+    print(type(str))
+    print(str)
