@@ -104,6 +104,8 @@ def get_pics():
 
 
 def click_event(event, x, y, flags, param):
+    if len(refPt) >= 5:
+        return
     if event == cv2.EVENT_LBUTTONDOWN:
         print(x, ",", y)
         refPt.append([x, y])
@@ -124,11 +126,14 @@ def click_event(event, x, y, flags, param):
         cv2.setMouseCallback("image", (lambda x: x + 1))
 
 
-def return_to_ophir():
-    frame_to_check, frame_off = get_pics()
-    events = [i for i in dir(cv2) if 'EVENT' in i]
+refPt = []
 
-    refPt = []
+
+def return_to_ophir():
+    # frame_to_check, frame_off = get_pics()
+    frame_to_check, frame_off = get_pics_from_video()
+
+    events = [i for i in dir(cv2) if 'EVENT' in i]
 
     while True:
         # *********GET 5 POINTS OF THE LOCATIONS*****************************
@@ -136,6 +141,7 @@ def return_to_ophir():
 
         # Here, you need to change the image name and it's path according to your directory
         img = frame_to_check
+        global img
         cv2.imshow("image", img)
         if len(refPt) == 5:
             break
@@ -146,24 +152,19 @@ def return_to_ophir():
     cv2.destroyAllWindows()
 
     states = []
-    while len(states) <= 30:
-        cam = Camera("http://" + argv[1] + ":5000/video_feed")
-        cur_frame = cam.get_frame()
-        bools = detect_on_points()
-
-    states = [State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0), State(0, 0, 1, 1, 1),
-              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
-              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(1, 0, 0, 0, 0), State(1, 0, 1, 0, 0),
-              State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0), State(0, 0, 1, 1, 1),
-              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
-              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
-              State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0), State(0, 0, 1, 1, 1),
-              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 1, 1, 1, 0), State(0, 0, 1, 0, 0),
-              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
-              State(0, 1, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 1, 0, 0, 0), State(0, 0, 1, 1, 1),
-              State(1, 1, 1, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
-              State(1, 1, 1, 1, 1), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
-              State(1, 1, 0, 1, 0), State(0, 0, 1, 1, 0), State(1, 1, 1, 0, 0), State(0, 0, 1, 1, 1),
-              State(1, 1, 0, 1, 1), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
-              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0)]
+    check_if_already = False
+    while True:
+        # cam = Camera("http://" + argv[1] + ":5000/video_feed")
+        # cur_frame = cam.get_frame()
+        cur_frame = get_cur_frame()
+        bools = detect_on_points(cur_frame, refPt, frame_off)
+        if len(states) != 0 and bools == [1, 1, 1, 1, 1]:
+            break
+        if bools == [1, 1, 1, 1, 1]:
+            continue
+        if not(bools[4] == 1 and bools[0] == 0 and bools[1] == 0 and bools[2] == 0 and bools[3] == 0) and not check_if_already:
+            states.append(State(bools[0], bools[1], bools[2], bools[3], bools[4]))
+            check_if_already = True
+        else:
+            check_if_already = False
     return states
