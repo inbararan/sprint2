@@ -1,5 +1,5 @@
 from __future__ import print_function
-from color_state import States
+from color_state import State
 import cv2 as cv
 import numpy as np
 import argparse
@@ -65,10 +65,22 @@ locate_leds_and_crops(list_on, list_off)
 
 #create dictionary
 def return_to_ophir():
-    states = []
-    for i in range(30):
-        states.append()
-
+    states = [State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0), State(0, 0, 1, 1, 1),
+              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
+              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(1, 0, 0, 0, 0), State(1, 0, 1, 0, 0),
+              State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0), State(0, 0, 1, 1, 1),
+              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
+              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
+              State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0), State(0, 0, 1, 1, 1),
+              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 1, 1, 1, 0), State(0, 0, 1, 0, 0),
+              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
+              State(0, 1, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 1, 0, 0, 0), State(0, 0, 1, 1, 1),
+              State(1, 1, 1, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
+              State(1, 1, 1, 1, 1), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
+              State(1, 1, 0, 1, 0), State(0, 0, 1, 1, 0), State(1, 1, 1, 0, 0), State(0, 0, 1, 1, 1),
+              State(1, 1, 0, 1, 1), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0),
+              State(1, 0, 0, 1, 0), State(1, 0, 1, 1, 0), State(0, 0, 1, 1, 0), State(1, 0, 1, 0, 0)]
+    return states
 # max_value = 255
 # max_value_H = 360 // 2
 # low_H = 0
