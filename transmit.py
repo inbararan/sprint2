@@ -1,24 +1,16 @@
 from arduino import set_state
 from color_state import State
 from encoding import encode
-from decoding import decode
 import time
 import os
-import sys
+
+FOLDER = r"C:\Users\t8747262\Desktop\dest"
+
+SLEEP_LEN = 1
 
 stateAll = State(1, 1, 1, 1, 1)
 stateOne = State(0, 0, 0, 0, 1)
 stateNone = State(0, 0, 0, 0, 0)
-
-
-"""def blink():
-    set_state(stateAll)
-    time.sleep(1)
-    set_state(stateNone)
-    time.sleep(1)
-
-
-blink()"""
 
 set_state(stateNone)
 
@@ -27,21 +19,32 @@ input("Press enter to light up\n")
 set_state(stateAll)
 time.sleep(30)
 
-file_name = input("Enter file path\n")
+print("Ready for files")
+done_files = []
 
 
-f = open(os.path.abspath(file_name), "rb")
-states = encode(f)
+def relevant_files():
+    return list(filter(lambda fn: fn not in done_files, os.listdir(FOLDER)))
 
-for state in states:
-    set_state(stateOne)
-    time.sleep(0.2)
-    set_state(state)
-    time.sleep(0.2)
 
-set_state(stateAll)
-time.sleep(2)
-set_state(stateNone)
+while True:
+    files = []
+    while len(files) == 0:
+        files = relevant_files()
 
-f.close()
+    for file_name in files:
+        print(f"Handling {file_name}")
+        done_files.append(file_name)
 
+        with open(os.path.join(FOLDER, file_name), "rb") as f:
+            states = encode(f)
+
+        for state in states:
+            set_state(stateOne)
+            time.sleep(SLEEP_LEN)
+            set_state(state)
+            time.sleep(SLEEP_LEN)
+
+        set_state(stateAll)
+        time.sleep(2)
+        set_state(stateNone)
