@@ -3,6 +3,7 @@ import copy
 import time
 import multiprocessing as mp
 from sys import argv
+import keyboard
 
 class Camera():
 
@@ -79,9 +80,8 @@ def main():
 
     print("Camera is alive?: " + str(cam.p.is_alive()))
 
-    while(1):
-
-        frame = cam.get_frame()
+    while(not keyboard.is_pressed("q")):
+          = cam.get_frame()
         frames.append(copy.deepcopy(frame))
         cv2.imshow("Feed", frame)
 
@@ -99,8 +99,8 @@ if __name__ == '__main__':
     frames = main()
     # save the photos
     img_array = frames
-
-    out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'), 15, len(img_array))
+    w, h, _ = img_array[0].shape
+    out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'), 15, (w, h))
 
     for i in range(len(img_array)):
         out.write(img_array[i])
