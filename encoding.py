@@ -4,10 +4,6 @@ from color_state import State
 from bitarray import bitarray
 
 
-def andbytes(abytes, bbytes):
-    return bytes([a & b for a, b in zip(abytes[::-1], bbytes[::-1])][::-1])
-
-
 def encode(f):
     states = []
     byte = f.read(1)
