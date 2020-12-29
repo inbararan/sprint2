@@ -5,7 +5,7 @@ import numpy as np
 import argparse
 
 squares_side = 6
-def circles_from_points(img, points):
+def detect_on_points(full_img, points, off_img):
     """
     This function creates circles and find colors.
     """
@@ -15,6 +15,7 @@ def circles_from_points(img, points):
         for x in range(2 * squares_side):
             for y in range(2 * squares_side):
                 new_circle.append([point[0] + x - squares_side, point[1] + y - squares_side])
+        circles.append()
     cv.imshow('Output', img)
     cv.waitKey()
     cv.destroyAllWindows()

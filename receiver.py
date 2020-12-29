@@ -7,11 +7,11 @@ import keyboard
 
 class Camera():
 
-    def __init__(self,rtsp_url):        
+    def __init__(self,rtsp_url):
         #load pipe for data transmittion to the process
         self.parent_conn, child_conn = mp.Pipe()
         #load process
-        self.p = mp.Process(target=self.update, args=(child_conn,rtsp_url))        
+        self.p = mp.Process(target=self.update, args=(child_conn,rtsp_url))
         #start process
         self.p.daemon = True
         self.p.start()
@@ -25,7 +25,7 @@ class Camera():
         #load cam into seperate process
 
         print("Cam Loading...")
-        cap = cv2.VideoCapture(rtsp_url,cv2.CAP_FFMPEG)   
+        cap = cv2.VideoCapture(rtsp_url,cv2.CAP_FFMPEG)
         print("Cam Loaded...")
         run = True
 
@@ -48,7 +48,7 @@ class Camera():
                 cap.release()
                 run = False
 
-        print("Camera Connection Closed")        
+        print("Camera Connection Closed")
         conn.close()
 
     def get_frame(self,resize=None):
@@ -60,29 +60,31 @@ class Camera():
         self.parent_conn.send(1)
         frame = self.parent_conn.recv()
 
-        #reset request 
+        #reset request
         self.parent_conn.send(0)
 
         #resize if needed
-        if resize == None:            
+        if resize == None:
             return frame
         else:
             return self.rescale_frame(frame,resize)
 
     def rescale_frame(self,frame, percent=65):
 
-        return cv2.resize(frame,None,fx=percent,fy=percent) 
+        return cv2.resize(frame,None,fx=percent,fy=percent)
 
 
 def main():
     frames = []
-    cam = Camera("http://" + argv[1] + ":5000/video_feed")
+    # vc = Camera("http://" + argv[1] + ":5000/video_feed")
+    vc = cv2.VideoCapture(0)
 
-    print("Camera is alive?: " + str(cam.p.is_alive()))
+    # print("Camera is alive?: " + str(cam.p.is_alive()))
 
     while(1):
 
-        frame = cam.get_frame()
+        # frame = vc.get_frame()
+        ret, frame = vc.read()
         frames.append(copy.deepcopy(frame))
         cv2.imshow("Feed", frame)
 
@@ -91,17 +93,19 @@ def main():
         if key == 13: #13 is the Enter Key
             break
 
-    cv2.destroyAllWindows()     
+    cv2.destroyAllWindows()
 
-    cam.end()
-    return frames
+    # cam.end()
+    return frames, vc
 
 if __name__ == '__main__':
-    frames = main()
+    frames, vc = main()
     # save the photos
     img_array = frames
 
-    out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'), 15, len(img_array))
+    out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc(*'XVID'), 20.0,
+                          (int(vc.get(3)), int(vc.get(4))))
+
 
     for i in range(len(img_array)):
         out.write(img_array[i])
