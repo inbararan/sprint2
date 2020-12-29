@@ -4,38 +4,27 @@ from color_state import State
 
 
 def decode(states):
-    states = []
-    byte = f.read(1)
-    while not byte:
-        mask = 0b1
-        bits = []
-        for i in range(0, 8):
-            b = ((mask & byte) != 0)
-            bits.append(b)
+    for i in range(0, len(states), 2):
+        bits = [states[i].r, states[i].g, states[i].b, states[i].y, states[i].w]
+        bits += [states[i+1].r, states[i+1].g, states[i+1].b, states[i+1].y, states[i+1].w]
 
-        xor1 = bits[0] ^ bits[1] ^ bits[2] ^ bits[3]
-        xor2 = bits[4] ^ bits[5] ^ bits[6] ^ bits[7]
-        S1 = State(bits[0], bits[1], bits[2], bits[3], xor1)
-        S2 = State(bits[4], bits[5], bits[6], bits[7], xor2)
-        states.append(S1)
-        states.append(S2)
+        print(bits)
+        print(chr())
+        m = 1
+        num = 0
+        s = ""
+        for i in range(len(bits)):
+            s += str(bits[i])
+        val = int(s, 2)
+        print(chr(val))
+        for i in range(len(bits)):
+            num += m * bits[len(bits)-i-1]
+            m = m << 1
+        # print(num)
 
-        byte = f.read(1)
     return states
-
-def decode(states):
-    i = 0
-
-    while i < len(states)
-    S1 = states[i]
-    i += 1
-    S2 = states[i]
-
-
-
-    i += 1
 
 
 if __name__ == '__main__':
-    states = []
+    states = [State(r=0, g=1, b=0, y=0, w=1), State(r=0, g=0, b=0, y=1, w=1)]
     text = decode(states)

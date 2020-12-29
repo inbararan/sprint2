@@ -12,14 +12,13 @@ def encode(f):
     states = []
     byte = f.read(1)
     while byte:
-        b = ord(bytes)
-        m = ord(0b1)
+        b = ord(byte)
+        m = 1
         bits = []
         for i in range(0, 8):
-            print(bytes(mask))
-            print(bytes(mask)[0] & bytes(byte)[0])
-            bits.append((bytes(mask)[0] & bytes(byte)[0]))
-            mask = mask << 1
+            bits.append(int((m & b) != 0))
+            m = m << 1
+        bits.reverse()
         print(bits)
 
         xor1 = bits[0] ^ bits[1] ^ bits[2] ^ bits[3]
@@ -29,8 +28,7 @@ def encode(f):
         states.append(S1)
         states.append(S2)
 
-        #byte = f.read(1)
-        byte = None
+        byte = f.read(1)
     return states
 
 
