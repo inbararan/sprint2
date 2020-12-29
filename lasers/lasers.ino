@@ -2,7 +2,7 @@
 //const int PINS[] = {8, 9, 10, 11, 12};
                   // R   G  B   Y  W
 const int PINS[] = {10, 12, 9, 11, 8};
-const int HIGHS[] = {255, 255, 255, 255, 180};
+const int HIGHS[] = {255, 255, 255, 255, 140};
 
 void setup() {
   // Setup the laser pins as output pins

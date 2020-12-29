@@ -8,6 +8,7 @@ import sys
 
 stateAll = State(1, 1, 1, 1, 1)
 stateOne = State(0, 0, 0, 0, 1)
+stateNone = State(0, 0, 0, 0, 0)
 
 
 """def blink():
@@ -19,13 +20,15 @@ stateOne = State(0, 0, 0, 0, 1)
 
 blink()"""
 
-set_state(State(0, 0, 0, 0, 0))
+set_state(stateNone)
 
-
-file_name = input()
+input("Press enter to light up\n")
 
 set_state(stateAll)
-time.sleep(5)
+time.sleep(30)
+
+file_name = input("Enter file path\n")
+
 
 f = open(os.path.abspath(file_name), "rb")
 states = encode(f)
@@ -36,4 +39,9 @@ for state in states:
     set_state(state)
     time.sleep(0.2)
 
-set_state(State(0, 0, 0, 0, 0))
+set_state(stateAll)
+time.sleep(2)
+set_state(stateNone)
+
+f.close()
+
