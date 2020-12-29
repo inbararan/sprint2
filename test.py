@@ -1,4 +1,6 @@
-byte = b'A'
-mask = 0b1
-type(mask)
-int(mask) & int(byte)
+import base64
+
+with open("im.bmp", "rb") as imageFile:
+    str = base64.b64encode(imageFile.read())
+    print(type(str))
+    print(str)
