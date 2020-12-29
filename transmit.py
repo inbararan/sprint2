@@ -19,12 +19,15 @@ stateOne = State(0, 0, 0, 0, 1)
 
 blink()"""
 
-set_state(stateAll)
+set_state(State(0, 0, 0, 0, 0))
+
 
 file_name = input()
-time.sleep(3)
 
-f = open(os.path.abspath("file_name"), "rb")
+set_state(stateAll)
+time.sleep(5)
+
+f = open(os.path.abspath(file_name), "rb")
 states = encode(f)
 
 for state in states:
