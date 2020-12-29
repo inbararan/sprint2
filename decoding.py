@@ -28,6 +28,17 @@ def decode(states):
 
     return text
 
+def decode_raw(states):
+    bits = []
+    for i in range(0, len(states), 2):
+        bits1 = [states[i].r, states[i].g, states[i].b, states[i].y]
+        bits2 = [states[i + 1].r, states[i + 1].g, states[i + 1].b, states[i + 1].y]
+
+        """bits1 = error_checking(bits1, states[i].w)
+        bits2 = error_checking(bits2, states[i + 1].w)"""
+        bits.extend(bits1 + bits2)
+    return bytes(bits)
+
 
 if __name__ == '__main__':
     states = [State(r=0, g=1, b=0, y=0, w=1), State(r=0, g=0, b=0, y=1, w=1), State(r=0, g=1, b=0, y=0, w=1),

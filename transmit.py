@@ -6,7 +6,7 @@ import os
 
 FOLDER = r"C:\Users\t8747262\Desktop\dest"
 
-SLEEP_LEN = 1
+LED_DUR = 0.5
 
 stateAll = State(1, 1, 1, 1, 1)
 stateOne = State(0, 0, 0, 0, 1)
@@ -15,9 +15,9 @@ stateNone = State(0, 0, 0, 0, 0)
 set_state(stateNone)
 
 input("Press enter to light up\n")
-
 set_state(stateAll)
-time.sleep(30)
+time.sleep(15)
+
 
 print("Ready for files")
 done_files = []
@@ -40,11 +40,14 @@ while True:
             states = encode(f)
 
         for state in states:
+            print(state)
             set_state(stateOne)
-            time.sleep(SLEEP_LEN)
+            time.sleep(LED_DUR)
             set_state(state)
-            time.sleep(SLEEP_LEN)
+            time.sleep(LED_DUR)
 
-        set_state(stateAll)
-        time.sleep(2)
-        set_state(stateNone)
+        #set_state(stateAll)
+        #time.sleep(2)
+        #set_state(stateNone)
+        print(f"Finished with {file_name}")
+    set_state(stateAll)
