@@ -19,7 +19,6 @@ def encode(f):
             bits.append(int((m & b) != 0))
             m = m << 1
         bits.reverse()
-        print(bits)
 
         xor1 = bits[0] ^ bits[1] ^ bits[2] ^ bits[3]
         xor2 = bits[4] ^ bits[5] ^ bits[6] ^ bits[7]
