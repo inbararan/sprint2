@@ -10,7 +10,7 @@ from sys import argv
 import keyboard
 from point_detector import detect_on_points
 import get_frames_from_video
-# get_frame_from_vid = get_frames_from_video.create_get_frame_func()
+get_frame_from_vid = get_frames_from_video.create_get_frame_func()
 
 
 class Camera():
@@ -82,7 +82,6 @@ class Camera():
 
 
 def get_pics():
-    # frames = []
     frame_to_check = []
     frame_off = []
     # cam = Camera("http://" + argv[1] + ":5000/video_feed")
@@ -91,20 +90,20 @@ def get_pics():
 
     while (1):
         # frame = cam.get_frame()
-        # frame = get_frame_from_vid()
-        ret, frame = cam.read()
-        # frames.append(copy.deepcopy(frame))
+        frame = get_frame_from_vid()
+        # ret, frame = cam.read()
         cv2.imshow("Feed", frame)
         if keyboard.is_pressed("o"):
             frame_off = copy.deepcopy(frame)
+            print("o pressed!")
         if keyboard.is_pressed("f"):
             frame_to_check = copy.deepcopy(frame)
             break
-        key = cv2.waitKey(1)
+        key = cv2.waitKey()
 
     cv2.destroyAllWindows()
     # cam.end()
-    cam.release()
+    # cam.release()
     return frame_to_check, frame_off
 
 
@@ -116,7 +115,7 @@ def click_event(event, x, y, flags, param):
         refPt.append([x, y])
         font = cv2.FONT_HERSHEY_SIMPLEX
         strXY = str(x) + ", " + str(y)
-        cv2.putText(img, strXY, (x, y), font, 0.5, (255, 255, 0), 2)
+        # cv2.putText(img, strXY, (x, y), font, 0.5, (255, 255, 0), 2)
         cv2.imshow("image", img)
 
     if event == cv2.EVENT_RBUTTONDOWN:
@@ -125,7 +124,7 @@ def click_event(event, x, y, flags, param):
         red = img[y, x, 2]
         font = cv2.FONT_HERSHEY_SIMPLEX
         strBGR = str(blue) + ", " + str(green) + "," + str(red)
-        cv2.putText(img, strBGR, (x, y), font, 0.5, (0, 255, 255), 2)
+        # cv2.putText(img, strBGR, (x, y), font, 0.5, (0, 255, 255), 2)
         cv2.imshow("image", img)
     # if len(refPt) == 5:
     #     cv2.setMouseCallback("image", (lambda x: x + 1))
@@ -158,26 +157,29 @@ def return_to_ophir():
     states = []
     check_if_already = False
     cam = cv2.VideoCapture(0)
+    cam = Camera("http://" + argv[1] + ":5000/video_feed")
     while True:
-        # cam = Camera("http://" + argv[1] + ":5000/video_feed")
         # cur_frame = cam.get_frame()
-        # cur_frame = get_frame_from_vid()
-        ret, cur_frame = cam.read()
+        cur_frame = get_frame_from_vid()
+        if cur_frame is None:
+            break
+        # ssret, cur_frame = cam.read()
         bools = detect_on_points(cur_frame, refPt, frame_off)
-        print(bools)
-        if keyboard.is_pressed("s") and len(states) % 2 == 0:
+        # print(bools)
+        if keyboard.is_pressed("s"):
             break
         # if len(states) > 20 and len(states) % 2 == 0 and bools == [1, 1, 1, 1, 1]:
         #    break
         if bools == [1, 1, 1, 1, 1] or bools == [0, 0, 0, 0, 0]:
             continue
-
         if not(bools[4] == 1 and bools[0] == 0 and bools[1] == 0 and bools[2] == 0 and bools[3] == 0) and not check_if_already:
-            states.append(State(bools[0], bools[1], bools[2], bools[3], bools[4]))
+            states.append(State(bools[0], bools[1], bools[2], bools[3], 0))
             check_if_already = True
-        else:
+        elif bools[4] == 1 and bools[0] == 0 and bools[1] == 0 and bools[2] == 0 and bools[3] == 0:
             check_if_already = False
-    cam.release()
+    # cam.release()
     cv2.destroyAllWindows()
+    if len(states) % 2 != 0:
+        states.append(State(0, 0, 0, 0, 0))
     print(states)
     return states

@@ -4,7 +4,7 @@ import cv2
 
 
 def create_frames():
-    vidcap = cv2.VideoCapture('output.avi')
+    vidcap = cv2.VideoCapture('output2290.avi')
     success, image = vidcap.read()
     count = 0
     lst = [image]
