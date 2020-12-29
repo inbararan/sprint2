@@ -24,4 +24,4 @@ def detect_on_points(full_img, points, off_img):
             bools.append(1)
         else:
             bools.append(0)
-    return State(bools[0], bools[1], bools[2], bools[3], bools[4])
+    return bools

@@ -5,6 +5,7 @@ import multiprocessing as mp
 from sys import argv
 import keyboard
 
+
 class Camera():
 
     def __init__(self,rtsp_url):
@@ -130,7 +131,7 @@ while True:
     # This will display all the available mouse click events
 
     # Here, you need to change the image name and it's path according to your directory
-    img = cv2.imread("light_off.jpeg")
+    img = frame_to_check
     cv2.imshow("image", img)
     if len(refPt) == 5:
         break
@@ -139,3 +140,6 @@ while True:
 
     cv2.waitKey(1)
 cv2.destroyAllWindows()
+
+
+def
