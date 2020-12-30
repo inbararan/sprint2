@@ -10,7 +10,7 @@ from sys import argv
 import keyboard
 from point_detector import detect_on_points
 import get_frames_from_video
-get_frame_from_vid = get_frames_from_video.create_get_frame_func()
+# get_frame_from_vid = get_frames_from_video.create_get_frame_func()
 
 
 class Camera():
@@ -84,13 +84,13 @@ class Camera():
 def get_pics():
     frame_to_check = []
     frame_off = []
-    # cam = Camera("http://" + argv[1] + ":5000/video_feed")
-    cam = cv2.VideoCapture(0)
+    cam = Camera("http://" + argv[1] + ":5000/video_feed")
+    # cam = cv2.VideoCapture(0)
     # print("Camera is alive?: " + str(cam.p.is_alive()))
 
     while (1):
-        # frame = cam.get_frame()
-        frame = get_frame_from_vid()
+        frame = cam.get_frame()
+        # frame = get_frame_from_vid()
         # ret, frame = cam.read()
         cv2.imshow("Feed", frame)
         if keyboard.is_pressed("o"):
@@ -99,10 +99,10 @@ def get_pics():
         if keyboard.is_pressed("f"):
             frame_to_check = copy.deepcopy(frame)
             break
-        key = cv2.waitKey()
+        key = cv2.waitKey(1)
 
     cv2.destroyAllWindows()
-    # cam.end()
+    cam.end()
     # cam.release()
     return frame_to_check, frame_off
 
@@ -156,16 +156,19 @@ def return_to_ophir():
 
     states = []
     check_if_already = False
-    cam = cv2.VideoCapture(0)
+    # cam = cv2.VideoCapture(0)
     cam = Camera("http://" + argv[1] + ":5000/video_feed")
     while True:
-        # cur_frame = cam.get_frame()
-        cur_frame = get_frame_from_vid()
+        cur_frame = cam.get_frame()
+        # cur_frame = get_frame_from_vid()
+        # ret, cur_frame = cam.read()
         if cur_frame is None:
             break
-        # ssret, cur_frame = cam.read()
         bools = detect_on_points(cur_frame, refPt, frame_off)
         # print(bools)
+        # if keyboard.is_pressed("j"):
+        #     states.append(State(2, 2, 2, 2, 2))
+        #     print("j pressed!")
         if keyboard.is_pressed("s"):
             break
         # if len(states) > 20 and len(states) % 2 == 0 and bools == [1, 1, 1, 1, 1]:
