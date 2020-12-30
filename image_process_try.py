@@ -161,6 +161,7 @@ def return_to_ophir():
     while True:
         cur_frame = cam.get_frame()
         cv2.imshow("Feed", cur_frame)
+        cv2.waitKey(1)
         # cur_frame = get_frame_from_vid()
         # ret, cur_frame = cam.read()
         if cur_frame is None:

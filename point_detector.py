@@ -3,7 +3,7 @@ import cv2 as cv
 import numpy as np
 import argparse
 
-squares_side = 3
+squares_side = 5
 limit_on = 10
 
 
