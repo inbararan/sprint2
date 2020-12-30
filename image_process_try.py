@@ -160,6 +160,7 @@ def return_to_ophir():
     cam = Camera("http://" + argv[1] + ":5000/video_feed")
     while True:
         cur_frame = cam.get_frame()
+        cv2.imshow("Feed", cur_frame)
         # cur_frame = get_frame_from_vid()
         # ret, cur_frame = cam.read()
         if cur_frame is None:
@@ -181,6 +182,7 @@ def return_to_ophir():
         elif bools[4] == 1 and bools[0] == 0 and bools[1] == 0 and bools[2] == 0 and bools[3] == 0:
             check_if_already = False
     # cam.release()
+    cam.end()
     cv2.destroyAllWindows()
     if len(states) % 2 != 0:
         states.append(State(0, 0, 0, 0, 0))
